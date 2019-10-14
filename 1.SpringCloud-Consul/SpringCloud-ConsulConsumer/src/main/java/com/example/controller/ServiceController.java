@@ -5,10 +5,12 @@ import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.example.model.User;
+import com.example.service.HelloRemoteService;
 
 @RestController
 public class ServiceController {
@@ -35,7 +37,7 @@ public class ServiceController {
 	}
 
 	/**
-	 * 调用远程接口
+	 * 使用RestTemplate，调用远程接口
 	 * 
 	 * @return
 	 */
@@ -47,6 +49,21 @@ public class ServiceController {
 
 		User callServiceResult = new RestTemplate().getForObject(serviceInstance.getUri().toString() + "/hello",
 				User.class);
+		System.out.println(callServiceResult);
+		return callServiceResult;
+	}
+	
+	@Autowired
+    private HelloRemoteService userService;
+	
+	/**
+	 * 使用Feign，调用远程接口
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/FeignCall")
+	public User FeignCall(@RequestParam(value = "id") int id) {
+		User callServiceResult = userService.hello(id);
 		System.out.println(callServiceResult);
 		return callServiceResult;
 	}
