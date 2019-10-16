@@ -11,7 +11,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>SpringCloud-ConsulConsumer</artifactId>
+	<artifactId>SpringCloud-HystrixConsumer</artifactId>
 	<version>1.0.0.1</version>
 	<name>SpringCloud-Hystrix</name>
 	<description>com.example</description>
