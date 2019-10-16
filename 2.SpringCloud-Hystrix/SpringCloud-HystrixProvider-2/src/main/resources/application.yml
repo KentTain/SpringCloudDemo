@@ -17,7 +17,7 @@ spring:
   cloud:
     consul:
       discovery:
-        preferIpAddress: true
+        preferIpAddress: true                 # the health check get ' no such host 'error
         health-check-path: /actuator/health   # 健康健康路径，也可以自己写
         health-check-interval: 10s            # 检测轮训时间 1m 代码1分钟
         #instance-id: consul-client00 实例ID，唯一值
