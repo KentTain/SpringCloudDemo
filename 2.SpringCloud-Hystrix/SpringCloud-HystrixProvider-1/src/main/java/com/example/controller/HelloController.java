@@ -12,6 +12,6 @@ public class HelloController {
 
     @RequestMapping("/hello")
     public @ResponseBody User hello(@RequestParam(value = "id") int id) {
-        return new User(id, "hello consul");
+        return new User(id, "hello consul from provider 1");
     }
 }

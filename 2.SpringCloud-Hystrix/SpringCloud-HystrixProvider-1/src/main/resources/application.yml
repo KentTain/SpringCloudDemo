@@ -7,16 +7,17 @@ management:
       exposure:
         include: '*'
   server:
-    port: 8503
+    port: 8502
 server:
   max-http-header-size: 10000000
-  port: 8503
+  port: 8502
 spring:
   application:
     name: service-provider
   cloud:
     consul:
       discovery:
+        preferIpAddress: true
         health-check-path: /actuator/health   # 健康健康路径，也可以自己写
         health-check-interval: 10s            # 检测轮训时间 1m 代码1分钟
         #instance-id: consul-client00 实例ID，唯一值
