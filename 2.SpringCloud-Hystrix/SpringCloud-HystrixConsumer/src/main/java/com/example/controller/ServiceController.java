@@ -1,5 +1,8 @@
 package com.example.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -42,13 +45,16 @@ public class ServiceController {
 	 * @return
 	 */
 	@RequestMapping("/call")
-	public User call() {
+	public User call(@RequestParam(value = "id") int id) {
 		ServiceInstance serviceInstance = loadBalancer.choose("service-provider");
 		System.out.println("服务地址：" + serviceInstance.getUri());
 		System.out.println("服务名称：" + serviceInstance.getServiceId());
 
+		Map<String,String> map = new HashMap<String, String>();
+        map.put("id", String.valueOf(id));
+		
 		User callServiceResult = new RestTemplate().getForObject(serviceInstance.getUri().toString() + "/hello",
-				User.class);
+				User.class, map);
 		System.out.println(callServiceResult);
 		return callServiceResult;
 	}
