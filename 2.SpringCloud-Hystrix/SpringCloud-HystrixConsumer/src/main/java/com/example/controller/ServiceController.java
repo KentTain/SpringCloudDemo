@@ -53,25 +53,29 @@ public class ServiceController {
 		Map<String,String> map = new HashMap<String, String>();
         map.put("id", String.valueOf(id));
 		
-		User callServiceResult = new RestTemplate().getForObject(serviceInstance.getUri().toString() + "/hello",
-				User.class, map);
+		User callServiceResult = new RestTemplate().getForObject(serviceInstance.getUri().toString() + "/hello?id=" + id,
+				User.class);
 		System.out.println(callServiceResult);
 		return callServiceResult;
 	}
 	
 	@Autowired
-    private HelloRemoteService userService;
+    private HelloRemoteService helloService;
 	
-	/**
-	 * 使用Feign，调用远程接口
-	 * 
-	 * @return
-	 */
-	@RequestMapping("/FeignCall")
+	@RequestMapping("/feign/hello")
 	public User FeignCall(@RequestParam(value = "id") int id) {
-		User callServiceResult = userService.hello(id);
+		User callServiceResult = helloService.hello(id);
 		System.out.println(callServiceResult);
 		return callServiceResult;
 	}
 
+	@RequestMapping("/feign/timeout")
+    public String feignTimeout() {
+        return helloService.timeout();
+    }
+
+    @RequestMapping("/feign/exception")
+    public String feignException() {
+        return helloService.exception();
+    }
 }
