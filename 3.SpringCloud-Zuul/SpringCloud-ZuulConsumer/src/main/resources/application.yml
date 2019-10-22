@@ -25,7 +25,7 @@ ribbon:
   hystrix:
     enabled: false
   # 配置ribbon默认的超时时间
-  ConnectTimeout: 2000
+  ConnectTimeout: 5000
   ReadTimeout: 5000
   # 是否开启重试
   OkToRetryOnAllOperations: true

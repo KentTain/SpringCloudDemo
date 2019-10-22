@@ -1,0 +1,90 @@
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  server:
+    port: 8501
+
+server:
+  max-http-header-size: 10000000
+  port: 8501
+
+spring:
+  application:
+    name: service-gateway
+  cloud:
+    consul:
+      discovery:
+        preferIpAddress: true                 # the health check get ' no such host 'error
+        health-check-path: /actuator/health   # 健康健康路径，也可以自己写
+        health-check-interval: 10s            # 检测轮训时间 1m 代码1分钟
+        hostname: ${spring.application.name}
+        service-name: ${spring.application.name}
+        #instance-id: consul-client00 实例ID，唯一值
+        instance-id: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+      host: 192.168.56.10
+      port: 8500
+
+ribbon:
+     # 暂不开启熔断机制
+  hystrix:
+    enabled: false
+     # 配置ribbon默认的超时时间
+  ConnectTimeout: 2000
+  ReadTimeout: 5000
+      # 是否开启重试
+  OkToRetryOnAllOperations: true
+      # 每个实例重试次数
+  MaxAutoRetries: 2
+      # 重试的时候实例切换次数
+  MaxAutoRetriesNextServer: 3
+
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: true
+        isolation:
+          strategy: THREAD
+          thread:
+            timeoutInMilliseconds: 15000
+            interruptOnTimeout: true
+            interruptOnFutureCancel: false
+          semaphore:
+            maxConcurrentRequests: 2
+
+
+#路由方式是serviceId的方式，那么ribbon的生效，如果是url的方式，则zuul.host开头的生效
+zuul:
+  host:
+    connect-timeout-millis: 10000
+    socket-timeout-millis: 60000
+  routes:
+    helloService:
+      path: /proxy/**
+      serviceId: service-provider
+      sensitiveHeaders: "*"
+  ratelimit:
+    key-prefix: ratelimit-api
+           # 启动限流服务
+    enabled: true
+    behind-proxy: true
+    default-policy:
+                 # 请求数量
+      limit: 100
+                # 请求总时间
+      quota: 20
+                 # 统计窗口刷新时间
+      refresh-interval: 60
+                # 限流类型
+      type: url
+  ignored-services: '*'
+  add-proxy-headers: true
+      #是否开启重试功能
+  retryable: true
+  sensitive-headers:

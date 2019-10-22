@@ -10,13 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.model.User;
 
 @RestController
+@RequestMapping("/hello")
 public class HelloController {
 	private static Logger LOGGER = LoggerFactory.getLogger(HelloController.class);
 
-    @RequestMapping("/hello")
-    public @ResponseBody User hello(@RequestParam(value = "id") int id) {
-    	LOGGER.info("invoking hello endpoint");
-        return new User(id, "hello consul from provider 1");
+    @RequestMapping("/index")
+    public @ResponseBody User index(@RequestParam(value = "id") int id) {
+    	LOGGER.info("invoking index endpoint");
+        return new User(id, "index consul from provider 1");
     }
     
     @RequestMapping("/timeout")
