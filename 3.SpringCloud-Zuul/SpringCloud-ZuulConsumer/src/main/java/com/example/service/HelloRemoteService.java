@@ -9,15 +9,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.model.User;
 
 @Component
-@FeignClient(name= "service-provider", fallback = HelloRemoteFallbackService.class)
+@FeignClient(name= "service-gateway", fallback = HelloRemoteFallbackService.class)
 public interface HelloRemoteService {
-	@RequestMapping(value = "/hello/index")
+	@RequestMapping(value = "/proxy/hello/index")
     public User hello(@RequestParam(value = "id") int id);
 	
-	@RequestMapping(value = "/hello/timeout", method = RequestMethod.GET)
+	@RequestMapping(value = "/proxy/hello/timeout", method = RequestMethod.GET)
     public String timeout();
 
-    @RequestMapping(value = "/hello/exception", method = RequestMethod.GET)
+    @RequestMapping(value = "/proxy/hello/exception", method = RequestMethod.GET)
     public String exception();
 
 }

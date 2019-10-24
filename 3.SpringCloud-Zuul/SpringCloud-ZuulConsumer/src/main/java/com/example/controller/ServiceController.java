@@ -46,14 +46,14 @@ public class ServiceController {
 	 */
 	@RequestMapping("/call")
 	public User call(@RequestParam(value = "id") int id) {
-		ServiceInstance serviceInstance = loadBalancer.choose("service-provider");
+		ServiceInstance serviceInstance = loadBalancer.choose("service-gateway");
 		System.out.println("服务地址：" + serviceInstance.getUri());
 		System.out.println("服务名称：" + serviceInstance.getServiceId());
 
 		Map<String,String> map = new HashMap<String, String>();
         map.put("id", String.valueOf(id));
 		
-		User callServiceResult = new RestTemplate().getForObject(serviceInstance.getUri().toString() + "/hello/index?id=" + id,
+		User callServiceResult = new RestTemplate().getForObject(serviceInstance.getUri().toString() + "/proxy/hello/index?id=" + id,
 				User.class);
 		System.out.println(callServiceResult);
 		return callServiceResult;
